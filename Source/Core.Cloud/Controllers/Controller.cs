@@ -33,7 +33,10 @@ using Core.Resources.Utilities;
 
 namespace Core.Cloud.Controllers;
 
+/* A build can be named in the path, so a reader pins the version it wants instead of taking
+ * whichever one the app happens to be showing. Without it, the main profile answers. */
 [Route("api")]
+[Route("{build}/api")]
 [ApiController]
 [ApiExplorerSettings(IgnoreApi = true)]
 public partial class CloudApiController : ControllerBase
@@ -272,9 +275,11 @@ public partial class CloudApiController : ControllerBase
         /* A path naming the project but not its Content folder still names one file, so it resolves */
         path = MainProfile!.Provider.NormalizePath(path);
         
-        /* Find the profile that'll have this asset */
-        var profile = FindBaseProfileForPath(path, found: out var found);
-        if (!found) return NotFoundResponse;
+        /* The build the caller named, or the one that holds this asset */
+        var profile = BuildForPath(path, out var routeError, out var found);
+
+        if (routeError is not null) return routeError;
+        if (profile is null || !found) return NotFoundResponse;
         
         var provider = profile.Provider;
         provider.TryLoadPackageObject(path, export: out var localObject);
@@ -729,7 +734,88 @@ public partial class CloudApiController : ControllerBase
         return null;
     }
 
-    private static BaseProfile FindBaseProfileForPath(string rawPath, out bool found)
+    /* The build the path named, where it named one. Answers null when the path named nothing, and
+     * sets the error when it named something that is not here, is not the only one of its name, or
+     * has not been started. */
+    /* Why the build named in the path could not answer, for the request being served */
+    private ActionResult? RouteBuildError;
+
+    private BaseProfile? RouteBuild(out ActionResult? error)
+    {
+        error = null;
+
+        if (!RouteData.Values.TryGetValue("build", out var named) || named is not string asked || asked.Length == 0)
+        {
+            return null;
+        }
+
+        var matches = BuildsNamed(asked);
+
+        if (matches.Count == 0)
+        {
+            error = NotFoundResponse;
+
+            return null;
+        }
+
+        if (matches.Count > 1)
+        {
+            error = AmbiguousBuildResponse;
+
+            return null;
+        }
+
+        var profile = matches[0];
+
+        if (!profile.IsInitialized)
+        {
+            error = new JsonResult(new
+            {
+                errorCode = "cloud.builds.not_loaded",
+                errorMessage = $"{profile.Name} is not loaded, start it first",
+                numericErrorCode = 1006
+            })
+            {
+                StatusCode = StatusCodes.Status409Conflict
+            };
+
+            return null;
+        }
+
+        TouchBuild(profile);
+
+        return profile;
+    }
+
+    /* Not static, so the build named in the path is honoured here rather than at each endpoint.
+     * Every caller already returns on a miss, which is what a path naming a build that is not
+     * here, not the only one of its name, or not started comes back as. RouteBuildError carries
+     * the reason for an endpoint that wants to say more than not found. */
+    private BaseProfile? FindBaseProfileForPath(string rawPath, out bool found)
+    {
+        var pinned = RouteBuild(out var routeError);
+
+        RouteBuildError = routeError;
+
+        if (routeError is not null)
+        {
+            found = false;
+
+            return null;
+        }
+
+        if (pinned is not null)
+        {
+            found = pinned.Provider.TryLoadPackage(rawPath.SubstringBefore('.'), package: out _);
+
+            return pinned;
+        }
+
+        return FindLoadedProfileForPath(rawPath, out found);
+    }
+
+    /* Which of the loaded builds holds this path, where the caller named none */
+    private static BaseProfile FindLoadedProfileForPath(string rawPath, out bool found)
     {
         var path = rawPath.SubstringBefore('.');
         found = false;
@@ -768,9 +854,23 @@ public partial class CloudApiController : ControllerBase
                 return profile;
             }
         }
-        
-        found = true;
 
+        /* Answered with the main profile either way, since a path that is in none of them is still
+         * read against one and reported from there. Said rather than claimed, so a caller that
+         * wants to know whether anything actually holds it can ask. */
         return MainProfile;
+    }
+
+    /* The build a request is answered from: the one its path named, or the one that holds the
+     * asset. A named build is taken at its word and never quietly answered from another. */
+    private BaseProfile? BuildForPath(string rawPath, out ActionResult? error, out bool found)
+    {
+        var profile = FindBaseProfileForPath(rawPath, out found);
+
+        error = RouteBuildError;
+
+        TouchBuild(profile);
+
+        return profile;
     }
 }

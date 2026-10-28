@@ -15,6 +15,70 @@ namespace Core.Cloud.Controllers;
 
 public partial class CloudApiController
 {
+    /* The paths that read like what was asked for, capped, for finding an asset without pulling a
+     * folder listing that runs to tens of megabytes. Searches the build the path named, or the
+     * main one, rather than every build at once. */
+    [HttpGet("folder/search")]
+    public ActionResult SearchFolderPaths(string? query, int limit = 50, string? under = null)
+    {
+        var profile = RouteBuild(out var routeError) ?? MainProfile;
+
+        if (routeError is not null) return routeError;
+        if (profile is null || !profile.IsInitialized) return NotInitializedResponse;
+
+        if (string.IsNullOrWhiteSpace(query)) return BadRequest(new
+        {
+            errorCode = "cloud.folder.no_query",
+            errorMessage = "No query supplied",
+            numericErrorCode = 1007
+        });
+
+        limit = Math.Clamp(limit, 1, 500);
+
+        var terms = query.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var scope = string.IsNullOrWhiteSpace(under) ? null : ToGameFolderPath(under, profile.Provider);
+
+        var hits = new List<string>();
+        var total = 0;
+
+        foreach (var file in profile.Provider.Files.Keys)
+        {
+            if (!file.EndsWith(".uasset", StringComparison.OrdinalIgnoreCase) &&
+                !file.EndsWith(".umap", StringComparison.OrdinalIgnoreCase)) continue;
+
+            if (scope is not null && !file.StartsWith(scope, StringComparison.OrdinalIgnoreCase)) continue;
+
+            /* Every term has to read somewhere in the path, so "pickaxe assassin" finds the one
+             * asset rather than everything either word appears in */
+            var matched = true;
+
+            foreach (var term in terms)
+            {
+                if (file.Contains(term, StringComparison.OrdinalIgnoreCase)) continue;
+
+                matched = false;
+
+                break;
+            }
+
+            if (!matched) continue;
+
+            total++;
+
+            if (hits.Count < limit) hits.Add(file.SubstringBeforeLast('.'));
+        }
+
+        return new JsonResult(new
+        {
+            build = profile.Name,
+            query,
+            total,
+            returned = hits.Count,
+            truncated = total > hits.Count,
+            paths = hits
+        });
+    }
+
     /* Every asset path under a folder, in the same form the export endpoint takes back */
     [HttpGet("folder/paths")]
     public ActionResult GetFolderPaths(string? path)

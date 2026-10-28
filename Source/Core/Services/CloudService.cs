@@ -1,10 +1,14 @@
 using System.Threading.Tasks;
+using System.Linq;
 
 using Avalonia.Threading;
 
 using FluentAvalonia.UI.Controls;
 
 using Core.Cloud;
+using Core.Models.Profiles;
+using Core.Models;
+using Core.Cloud.Controllers;
 using Core.Framework;
 
 namespace Core.Services;
@@ -31,10 +35,73 @@ public class CloudService : IService
             API.OnInitialized += OnInitialized;
         }
 
+        RegisterBuilds();
+
         if (Settings.Cloud.RunHostedAPI)
         {
             Task.Run(() => API.Run());
         }
+    }
+
+    /* Loading and unloading live in the app, and Core.Cloud cannot see it, so it is handed the
+     * three things it needs once. Everything on disk is offered rather than only what is open,
+     * since a reader asking for a build by name is usually asking for one that is not. */
+    /* How many profiles were on disk when the list was last read */
+    private static int KnownProfileCount;
+
+    private static void RegisterBuilds()
+    {
+        CloudApiController.EnumerateBuilds = () =>
+        {
+            /* Re-read when the folder has gained or lost one, so a build saved while Core is open
+             * can be asked for without restarting it. Counting files is cheap next to parsing
+             * them, and the loaded ones are kept as they are: re-reading would hand back fresh
+             * objects and drop every provider already mounted. */
+            var onDisk = Core.Resources.Globals.ProfilesFolder.Exists
+                ? Core.Resources.Globals.ProfilesFolder.GetFiles("*.json").Length
+                : 0;
+
+            if (GameDetection.LoadedProfiles.Count == 0 || onDisk != KnownProfileCount)
+            {
+                var loaded = GameDetection.LoadedProfiles.Where(it => it.IsInitialized).ToList();
+
+                GameDetection.LoadAllAsync().GetAwaiter().GetResult();
+
+                /* Whatever was already open stays the object that is open */
+                for (var index = 0; index < GameDetection.LoadedProfiles.Count; index++)
+                {
+                    var fresh = GameDetection.LoadedProfiles[index];
+                    var already = loaded.FirstOrDefault(it => it.FileName == fresh.FileName);
+
+                    if (already is not null)
+                    {
+                        GameDetection.LoadedProfiles[index] = already;
+                    }
+                }
+
+                KnownProfileCount = onDisk;
+            }
+
+            return GameDetection.LoadedProfiles;
+        };
+
+        CloudApiController.StartBuildAsync = async (profile, token) =>
+        {
+            if (profile is Profile known)
+            {
+                await known.Initialize(token);
+            }
+        };
+
+        CloudApiController.StopBuild = profile =>
+        {
+            if (profile is Profile known)
+            {
+                known.DisposeProvider();
+            }
+        };
+
+        CloudApiController.StartIdleSweep();
     }
 
     private void OnError(string Title, string Header, string Content)
