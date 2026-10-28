@@ -13,7 +13,7 @@
 </div>
 
 ### Description
-Core is an **extension** of [Reflection](https://github.com/JsonAsAsset/Reflection) that fetches almost every referenced asset for you, hands-free.
+Mirror is an **extension** of [Reflection](https://github.com/JsonAsAsset/Reflection) that fetches almost every referenced asset for you, hands-free.
 
 ### Licensing
 
@@ -53,7 +53,7 @@ git clone https://github.com/JsonAsAsset/Core --recursive
 ```
 #### Build
 ```
-dotnet publish Source/Core -c Release --no-self-contained -r win-x64 -o "./Release" -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true
+dotnet publish Source/Mirror -c Release --no-self-contained -r win-x64 -o "./Release" -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true
 ```
 #### Update Libraries
 ```
