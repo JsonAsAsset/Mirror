@@ -137,65 +137,7 @@ public partial class HomeView : ViewBase<HomeViewModel>
         Donate_OnPointerPressed(sender);
     }
     
-    static bool IsLogoAnimationPlaying;
-    
-    private async void PlayLogoAnimation()
-    {
-        if (IsLogoAnimationPlaying) return;
-        
-        if (Logo?.RenderTransform is not ScaleTransform Transform)
-        {
-            return;
-        }
-
-        const double startScale = 1.0;
-        const double endScale = 3.5;
-        const double durationMs = 30;
-        const int stepMs = 1;
-
-        Logo.Opacity = 1.0;
-
-        var startOpacity = Logo.Opacity;
-        const double endOpacity = 0.0;
-
-        double elapsed = 0;
-        
-        IsLogoAnimationPlaying = true;
-
-        while (elapsed < durationMs)
-        {
-            var time = elapsed / durationMs;
-            var eased = new CubicEaseOut().Ease(time);
-
-            var currentScale = startScale + (endScale - startScale) * eased;
-            var currentOpacity = startOpacity + (endOpacity - startOpacity) * eased;
-
-            Transform.ScaleX = currentScale;
-            Transform.ScaleY = currentScale;
-            Logo.Opacity = currentOpacity;
-
-            await Task.Delay(stepMs);
-            
-            elapsed += stepMs;
-        }
-
-        Transform.ScaleX = 1.0;
-        Transform.ScaleY = 1.0;
-        
-        Logo.Opacity = 0.0;
-        
-        IsLogoAnimationPlaying = false;
-    }
-    
     private static readonly Random _random = new();
-
-    private void InputElement_OnPointerEntered(object? sender, PointerEventArgs e)
-    {
-        if (_random.NextDouble() <= 0.1)
-        {
-            PlayLogoAnimation();
-        }
-    }
 
     private static readonly string[] ReadyPrompts =
     [
@@ -225,10 +167,5 @@ public partial class HomeView : ViewBase<HomeViewModel>
         {
             Prompt.Text = "start a profile!";
         }
-    }
-
-    private void Visual_OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
-    {
-        DispatcherTimer.RunOnce(() => PlayLogoAnimation(), TimeSpan.FromSeconds(0.1));
     }
 }

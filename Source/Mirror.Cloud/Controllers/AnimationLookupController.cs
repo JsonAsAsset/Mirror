@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mirror.Resources.Framework.Base;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Controller: Animation Lookup                                                                                          */
+/* Mirror Cloud Controller: Animation Lookup                                                                                          */
 /*                                                                                                                                  */
 /* Where an animation lives, given only its name. An additive that is a difference from a frame of itself names nothing it was built */
 /* over, and what it was is usually written into its own name -- so the other end works out a name and asks here whether the game    */

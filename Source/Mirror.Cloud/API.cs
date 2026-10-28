@@ -38,7 +38,7 @@ public partial class CloudWebAPI : ObservableObject
 
         builder.Logging.AddFilter((_, _) => false);
         
-        services.AddDbContext<DbContext>(opt => opt.UseInMemoryDatabase("Core.Cloud.Controllers"));
+        services.AddDbContext<DbContext>(opt => opt.UseInMemoryDatabase("Mirror.Cloud.Controllers"));
         services.AddControllers();
         services.AddEndpointsApiExplorer();
 
@@ -87,7 +87,7 @@ public partial class CloudWebAPI : ObservableObject
         var URL = $"http://localhost:1500";
         
         Log.Information($"Framework: {RuntimeInformation.FrameworkDescription}");
-        Log.Information($"Core.Cloud is running in the background: {URL}");
+        Log.Information($"Mirror.Cloud is running in the background: {URL}");
         
         try
         {
@@ -119,7 +119,7 @@ public partial class CloudWebAPI : ObservableObject
 
             ResetStatus();
             
-            Log.Information("Core.Cloud stopped");
+            Log.Information("Mirror.Cloud stopped");
         }
     }
 

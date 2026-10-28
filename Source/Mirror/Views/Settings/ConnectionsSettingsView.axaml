@@ -33,7 +33,7 @@
                 
                 <controls:SettingsExpander Header="Discord Presence" Description="Displays the application's status in your discord profile.">
                     <controls:SettingsExpander.IconSource>
-                        <controls:BitmapIconSource UriSource="avares://Core/Assets/Brands/Scaled/Discord.20px.png" />
+                        <controls:BitmapIconSource UriSource="avares://Mirror/Assets/Brands/Scaled/Discord.20px.png" />
                     </controls:SettingsExpander.IconSource>
                     
                     <controls:SettingsExpander.Footer>

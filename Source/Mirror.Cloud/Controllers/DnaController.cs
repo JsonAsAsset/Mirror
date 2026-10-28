@@ -10,7 +10,7 @@ using Mirror.Cloud.Objects;
 using Microsoft.AspNetCore.Mvc;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Controller: DNA                                                                                                       */
+/* Mirror Cloud Controller: DNA                                                                                                       */
 /*                                                                                                                                  */
 /* A MetaHuman head carries its rig as a DNA hung off the mesh's asset user data, and the DNA itself is a bit stream written after   */
 /* that export's properties rather than anything the export can describe. It is handed back whole, the way it sits in the package,   */

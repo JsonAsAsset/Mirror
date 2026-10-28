@@ -7,7 +7,7 @@ using Serilog;
 using Mirror.Resources.Framework.Base;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Builds */
+/* Mirror Cloud Builds */
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 namespace Mirror.Cloud.Controllers;
@@ -218,7 +218,7 @@ public partial class CloudApiController
             return new JsonResult(new
             {
                 errorCode = "cloud.builds.in_use",
-                errorMessage = "That build is the one open in Core, close it there instead",
+                errorMessage = "That build is the one open in Mirror, close it there instead",
                 numericErrorCode = 1005
             })
             {

@@ -21,7 +21,7 @@
             <StackPanel Classes="SettingsStackPanel">
                 <TextBlock Classes="SettingsCategory" Text="Convenience"/>
                 
-                <controls:SettingsExpander Header="Update to Newest Commit" Description="Always update to the newest change of Core.">
+                <controls:SettingsExpander Header="Update to Newest Commit" Description="Always update to the newest change of Mirror.">
                     <controls:SettingsExpander.IconSource>
                         <fluent:FluentIconSource Icon="DeveloperBoard" />
                     </controls:SettingsExpander.IconSource>

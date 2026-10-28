@@ -43,7 +43,7 @@ public class AppInstance : Avalonia.Application
         {
             App.Initialize(desktop);
             
-            Log.Information($"Core version: {VERSION}");
+            Log.Information($"Mirror version: {VERSION}");
             _ = NativeLibraryLoader.Load(RuntimeFolder);
             TextureDecoder.UseAssetRipperTextureDecoder = false;
 

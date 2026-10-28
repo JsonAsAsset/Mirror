@@ -4,7 +4,7 @@ using CUE4Parse.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Controller: Reference Skeleton                                                                                        */
+/* Mirror Cloud Controller: Reference Skeleton                                                                                        */
 /*                                                                                                                                  */
 /* The pose a mesh is bound at. A mesh carries its own, and it is not the one its skeleton asset carries: characters share a         */
 /* skeleton and each is built at its own proportions. Everything the mesh is skinned with is measured against this pose, so an       */

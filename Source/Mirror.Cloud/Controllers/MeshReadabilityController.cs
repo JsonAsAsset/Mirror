@@ -4,7 +4,7 @@ using CUE4Parse.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Controller: Mesh Readability                                                                                          */
+/* Mirror Cloud Controller: Mesh Readability                                                                                          */
 /*                                                                                                                                  */
 /* Whether this build's meshes can be read at all, answered by reading some. A mesh hands back no geometry for several reasons and   */
 /* they look alike from the far end: the build may carry no cooked render data, or carry it in a form this parser does not know.     */

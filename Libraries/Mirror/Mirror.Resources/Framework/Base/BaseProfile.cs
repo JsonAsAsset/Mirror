@@ -24,8 +24,8 @@ public enum EAudioFormatType
     Raw
 }
 
-/* This base profile class is used to separate what's needed to shared, and what's visual (located in Core) */
-/* This class is used by both Mirror.Cloud and Core */
+/* This base profile class is used to separate what's needed to shared, and what's visual (located in Mirror) */
+/* This class is used by both Mirror.Cloud and Mirror */
 public partial class BaseProfile : ObservableValidator
 {
     /* The mappings as the game wrote them, and the same completed from the engine.

@@ -8,7 +8,7 @@ using Mirror.Cloud.Objects;
 using Microsoft.AspNetCore.Mvc;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Controller: DNA Morph Targets                                                                                         */
+/* Mirror Cloud Controller: DNA Morph Targets                                                                                         */
 /*                                                                                                                                  */
 /* The same faces the DNA poses make, written as where every vertex ends up rather than as what the joints did.                      */
 /*                                                                                                                                  */

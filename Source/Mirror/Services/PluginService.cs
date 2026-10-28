@@ -34,10 +34,10 @@ public class PluginService : IService
                 return;
 
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(a => a.GetName().Name?.StartsWith("Core.Plugins.") == true)
+                .Where(a => a.GetName().Name?.StartsWith("Mirror.Plugins.") == true)
                 .ToDictionary(a => a.GetName().Name!, StringComparer.OrdinalIgnoreCase);
             
-            foreach (var pluginFile in Directory.GetFiles(pluginsPath, "Core.Plugins.*.dll"))
+            foreach (var pluginFile in Directory.GetFiles(pluginsPath, "Mirror.Plugins.*.dll"))
             {
                 try
                 {

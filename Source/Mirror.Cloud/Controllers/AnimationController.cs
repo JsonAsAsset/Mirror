@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Controller: Animation                                                                                                 */
+/* Mirror Cloud Controller: Animation                                                                                                 */
 /*                                                                                                                                  */
 /* The bone tracks of an animation sequence, decompressed. A cook keeps only the compressed stream and the keys an editor was given  */
 /* are not in it, so they are read back out one bone at a time, in the pose the sequence stores rather than the pose it plays at:    */

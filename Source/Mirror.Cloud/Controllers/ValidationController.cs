@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mirror.Resources.Framework.Base;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Controller: Validation */
+/* Mirror Cloud Controller: Validation */
 /*                                                                                                                                  */
 /* Resolves batches of Unreal package paths against the mounted game files, and for the ones that don't exist, suggests where a file */
 /* of the same name actually lives. Used by Reflection's Validation tool to find assets sitting in the wrong folder.               */

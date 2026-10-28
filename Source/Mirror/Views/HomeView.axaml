@@ -7,11 +7,11 @@
     xmlns:framework="clr-namespace:Mirror.Services.Framework"
     xmlns:properties="clr-namespace:Mirror.Extensions.Animations.Properties"
     xmlns:mirror="clr-namespace:Mirror"
+    xmlns:navigation="clr-namespace:Mirror.Controls.Navigation"
     x:Class="Mirror.Views.HomeView"
     x:DataType="viewModels:HomeViewModel"
     mc:Ignorable="d"
     d:DesignWidth="1500"
-    AttachedToVisualTree="Visual_OnAttachedToVisualTree"
     d:DesignHeight="800">
     
     <UserControl.Resources>
@@ -22,9 +22,9 @@
     </UserControl.Resources>
 
     <Grid>
-        <Grid Background="Transparent">
+        <Grid Background="Transparent" Margin="0 40 0 0">
             <!-- Background blur effect -->
-            <Border Height="120" Margin="200 0 200 0" Opacity="0.5"
+            <Border Height="120" Margin="200 0 200 -150" Opacity="0.5"
                     HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -45,16 +45,6 @@
                 </Grid.RowDefinitions>
                 
                 <StackPanel Grid.Row="1" HorizontalAlignment="Center" Spacing="30" Margin="0 0 0 0">
-                    <!-- App icon -->
-                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.96">
-                        <Image Height="150" HorizontalAlignment="Center" PointerEntered="InputElement_OnPointerEntered" Source="/Assets/Icon/App.Icon.png" Margin="0 0 0 25"/>
-                        <Image Height="150" HorizontalAlignment="Center" Opacity="0" Name="Logo" IsHitTestVisible="False" Source="/Assets/Icon/App.Icon.png" Margin="0 -70 0 0">
-                            <Image.RenderTransform>
-                                <ScaleTransform ScaleX="1" ScaleY="1"/>
-                            </Image.RenderTransform>
-                        </Image>
-                    </Grid>
-                    
                     <!-- Fixed container for tagline text to prevent layout shifts -->
                     <TextBlock Name="Prompt" LineSpacing="0" FontWeight="Bold" LetterSpacing="-1" HorizontalAlignment="Center" FontSize="100" Foreground="#f5f5f5">
                         start a profile!
@@ -83,7 +73,7 @@
                     </Border>
                     
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
-                        Margin="0 25 0 0"
+                        Margin="0 70 0 0"
                         Name="ButtonContainer"
                         Orientation="Horizontal" Spacing="15">
                         
@@ -102,7 +92,7 @@
                     </StackPanel>
                     
                     <!-- Social buttons -->
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Spacing="15" Margin="0 30 0 0">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Spacing="15" Margin="0 40 0 0">
                         <!-- Donate button -->
                         <Grid>
                             <Border Margin="-35 0 -35 0" Opacity="0.0" Background="#ffdd26" Width="250" Height="30">

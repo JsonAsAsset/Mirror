@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mirror.Resources.Framework.Base;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Controller: Folder                                                                                                    */
+/* Mirror Cloud Controller: Folder                                                                                                    */
 /*                                                                                                                                  */
 /* Lists every asset path under a folder of the mounted game files. Used by Reflection to reflect a whole folder without anything   */
 /* in the project pointing at it first.                                                                                             */

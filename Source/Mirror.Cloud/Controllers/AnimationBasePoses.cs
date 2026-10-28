@@ -6,7 +6,7 @@ using CUE4Parse.Utils;
 using Mirror.Resources.Framework.Base;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud: Additive Base Poses                                                                                                  */
+/* Mirror Cloud: Additive Base Poses                                                                                                  */
 /*                                                                                                                                  */
 /* What an additive was built over, for the ones that no longer say. An aim offset keeps the kind of difference it is and drops the  */
 /* animation it was taken from, so there is nothing left in the asset to follow: the pairing lives in how the game names things, and */

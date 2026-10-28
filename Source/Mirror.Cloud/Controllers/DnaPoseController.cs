@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Controller: DNA Poses                                                                                                 */
+/* Mirror Cloud Controller: DNA Poses                                                                                                 */
 /*                                                                                                                                  */
 /* What each of a rig's controls does to the face, worked out here rather than by RigLogic.                                         */
 /*                                                                                                                                  */

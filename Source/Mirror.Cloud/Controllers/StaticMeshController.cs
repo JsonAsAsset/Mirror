@@ -11,7 +11,7 @@ using CUE4Parse_Conversion.Options;
 using Microsoft.AspNetCore.Mvc;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Controller: Static Mesh                                                                                               */
+/* Mirror Cloud Controller: Static Mesh                                                                                               */
 /*                                                                                                                                  */
 /* The cooked geometry of a static mesh, vertex for vertex, with its material slots. Nothing goes through an exchange format, so     */
 /* vertex order and splits are the ones the game shipped.                                                                           */

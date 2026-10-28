@@ -53,7 +53,7 @@ public class CloudService : IService
     {
         CloudApiController.EnumerateBuilds = () =>
         {
-            /* Re-read when the folder has gained or lost one, so a build saved while Core is open
+            /* Re-read when the folder has gained or lost one, so a build saved while Mirror is open
              * can be asked for without restarting it. Counting files is cheap next to parsing
              * them, and the loaded ones are kept as they are: re-reading would hand back fresh
              * objects and drop every provider already mounted. */

@@ -10,7 +10,7 @@ using System.Globalization;
 using System.Text;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Controller: Curve Expressions                                                                                         */
+/* Mirror Cloud Controller: Curve Expressions                                                                                         */
 /*                                                                                                                                  */
 /* A CurveExpressionsDataAsset drives one curve from others by arithmetic, and what a head does with its face is written here rather */
 /* than in any animation. Cooking keeps only the compiled form: a postfix instruction list per target curve, with functions named by */

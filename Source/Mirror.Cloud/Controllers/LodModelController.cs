@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Core Cloud Controller: LOD Model                                                                                                 */
+/* Mirror Cloud Controller: LOD Model                                                                                                 */
 /*                                                                                                                                  */
 /* The cooked geometry of a skeletal mesh, vertex for vertex. Anything that goes through an exchange format has its vertices         */
 /* re-derived on import, which breaks cloth binding, skin weight profiles and morph deltas: they all key off the original ones.      */
