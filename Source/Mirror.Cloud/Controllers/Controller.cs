@@ -105,6 +105,14 @@ public partial class CloudApiController : ControllerBase
         SecondaryBaseProfiles = list;
     }
     
+    /* Assets that hold widget trees belonging to other widgets.
+     *
+     * A widget only ever placed inside another one is cooked as part of that one: its own
+     * WidgetTree is null and the tree sits under the instance placed in the containing asset.
+     * Named here rather than in the editor, since which widgets were cooked this way is a fact
+     * about the build being read. */
+    private static readonly string[] DefaultWidgetTreeSources = ["/Game/Athena/HUD/AthenaHUD"];
+
     /* Metadata request to retrieve information about this process */
     [HttpGet("metadata")]
     public ActionResult Get()
@@ -123,6 +131,8 @@ public partial class CloudApiController : ControllerBase
             /* Which mapping an older head's curves are written in terms of, said once here so
              * whoever needs it does not have to be told and cannot be told a different one */
             curve_mapping = DefaultCurveMapping,
+            /* Where a widget tree may live when the widget itself was cooked without one */
+            widget_tree_sources = DefaultWidgetTreeSources,
             profile = MainProfile
         });
     }
