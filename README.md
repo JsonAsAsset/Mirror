@@ -42,7 +42,7 @@ To simplify distribution, all license texts have been consolidated into a single
 ## Git Commands
 #### Clone
 ```
-git clone https://github.com/JsonAsAsset/Core --recursive
+git clone https://github.com/JsonAsAsset/Mirror --recursive
 ```
 #### Build
 ```
