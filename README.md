@@ -8,28 +8,7 @@ Mirror is an **extension** of [Reflection](https://github.com/JsonAsAsset/Reflec
    [![Releases](https://img.shields.io/github/downloads/JsonAsAsset/Mirror/total?style=for-the-badge&color=black&label=Downloads)](https://github.com/JsonAsAsset/Mirror/releases)
 </div>
 
-### Licensing
-
-This project is licensed under the [Apache 2.0 License](./Licensing/Apache-2.0.txt). We make use of open-source libraries created by many talented developers.
-
-For detailed license information and third-party attributions, please refer to:
-* The [Licensing directory](./Licensing)
-* The [THIRD\_PARTY\_NOTICES.md](./Licensing/THIRD_PARTY_NOTICES.md) file
-
-To simplify distribution, all license texts have been consolidated into a single [NOTICE](./Licensing/NOTICE) file.
-
------------------
-
-### **Table of Contents**
-
-> 1. [Installation](#installation)  
-> 2. [Git Commands](#commands)
-
------------------
-
 <a name="installation"></a>
-## How to Use
-
 1. **Visit the Releases Page:**  
    Go to the [Releases page](/../../releases), and download the latest release.
 2. **Setup the Application:**  
