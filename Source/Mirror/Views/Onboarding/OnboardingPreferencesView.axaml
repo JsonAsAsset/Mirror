@@ -1,0 +1,49 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:Mirror.Views"
+
+    x:Class="Mirror.Views.Onboarding.OnboardingPreferencesView"
+    
+    mc:Ignorable="d"
+    d:DesignWidth="1250"
+    d:DesignHeight="700">
+    
+    <Grid>
+        <StackPanel VerticalAlignment="Center" Spacing="35" Margin="0 30 0 0">
+            <TextBlock LetterSpacing="-1" HorizontalAlignment="Center" FontSize="50" FontWeight="Bold" Foreground="White">
+                <TextBlock.Effect>
+                    <DropShadowEffect
+                        Color="#e3e3e3"
+                        BlurRadius="99"
+                        Opacity="0.2"/>
+                </TextBlock.Effect>
+                
+                Adjust Your Preferences
+            </TextBlock>
+        
+            <views:SettingsView Width="1150" Height="430" IsOnboarding="True"/>
+            
+            <Button
+                Classes="GlassWhite HoverLift"
+                Click="Save"
+                Cursor="Hand"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                HorizontalAlignment="Center"
+                Padding="150 15"
+                ClipToBounds="True"
+                Margin="0 -15 0 0"
+                FontWeight="SemiBold"
+                CornerRadius="5"
+                IsDefault="True">
+                
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <TextBlock Margin="0 1 0 0" Text="Save" FontSize="20" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

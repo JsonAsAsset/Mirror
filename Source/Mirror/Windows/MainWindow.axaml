@@ -1,0 +1,136 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+
+    xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+    xmlns:views="clr-namespace:Mirror.Views"
+    xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+    xmlns:windowModels="clr-namespace:Mirror.WindowModels"
+    xmlns:profiles="clr-namespace:Mirror.Views.Profiles"
+
+    x:Class="Mirror.Windows.MainWindow"
+    x:DataType="windowModels:MainWindowModel"
+    
+    Title="{Binding Title}"
+
+    Width="1439" Height="895"
+    MinWidth="945" MinHeight="680"
+    
+    mc:Ignorable="d"
+    
+    d:DesignWidth="{Binding $parent[Window].MinWidth}"
+    d:DesignHeight="{Binding $parent[Window].MinHeight}">
+
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Ctrl+E" Command="{Binding RequestEditProfile}" />
+    </Window.KeyBindings>
+    
+    <Grid RowDefinitions="Auto, *" Margin="{Binding $parent[Window].OffScreenMargin}">
+        <!-- Title Bar Padding -->
+        <Grid Height="{DynamicResource TitleBarHeight}" Grid.Row="0" IsHitTestVisible="False"/>
+
+        <Grid Grid.Row="1">
+            <!-- Entire Navigation -->
+            <controls:NavigationView
+                PaneDisplayMode="Left"
+                CompactPaneLength="{DynamicResource TitleBarHeight}"
+                OpenPaneLength="100"
+                
+                Classes="NoRoundedBackground"
+                
+                IsBackButtonVisible="False" IsPaneToggleButtonVisible="False"
+                
+                Background="{DynamicResource BackgroundBrush}"
+
+                x:Name="MainNavigationView">
+
+                <controls:NavigationView.MenuItems>
+                    <!-- Home -->
+                    <controls:NavigationViewItem Height="56" Focusable="False" ToolTip.Tip="Home" Tag="{x:Type views:HomeView}" IsSelected="True">
+                        <fluent:SymbolIcon Symbol="Home" IconVariant="Filled" FontSize="20" />
+                    </controls:NavigationViewItem>
+                    
+                    <controls:NavigationViewItemSeparator IsVisible="False" Margin="0 5" CornerRadius="15"/>
+
+                    <!-- Plugin -->
+                    <controls:NavigationViewItem Height="56" IsVisible="False" Focusable="False" ToolTip.Tip="Plugin" Tag="{x:Type views:PluginView}">
+                        <Image Width="20" Height="20" Source="/Assets/Brands/Reflection.40px.png"/>
+                    </controls:NavigationViewItem>
+                </controls:NavigationView.MenuItems>
+
+                <controls:NavigationView.FooterMenuItems>
+                    <!-- Profiles -->
+                    <controls:NavigationViewItem Height="56" Focusable="False" ToolTip.Tip="Profiles" Tag="{x:Type profiles:ProfileSelectionView}">
+                        <fluent:SymbolIcon Width="20" Symbol="Person"/>
+                    </controls:NavigationViewItem>
+                    
+                    <controls:NavigationViewItemSeparator Margin="0 5" CornerRadius="15"/>
+                    
+                    <!-- Settings -->
+                    <controls:NavigationViewItem Height="56" Focusable="False" ToolTip.Tip="Settings" Tag="{x:Type views:SettingsView}">
+                        <fluent:FluentIcon Width="18" Icon="Settings" Margin="0 0 2 0" />
+                    </controls:NavigationViewItem>
+                </controls:NavigationView.FooterMenuItems>
+
+                <Grid Background="{DynamicResource BackgroundBrush}">
+                    <!-- Content Frame -->
+                    <controls:Frame UseLayoutRounding="True" Background="{DynamicResource BackgroundBrush}" x:Name="ContentFrame"/>
+                    
+                    <!-- Notifications -->
+                     <ItemsControl Margin="0 25" VerticalAlignment="Bottom" ItemsSource="{Binding Info.Messages}">
+                         <ItemsControl.ItemTemplate>
+                             <DataTemplate>
+                                 <controls:InfoBar
+                                     Title="{Binding Title}"
+                                     Message="{Binding Message}"
+                                     Severity="{Binding Severity}"
+                                     
+                                     CornerRadius="15"
+                                     Classes="FadeIn"
+                                     
+                                     Margin="25 2"
+                                     Background="{DynamicResource InfoBarBackground}"
+                                     
+                                     IsOpen="True">
+                                     
+                                     <controls:InfoBar.Effect>
+                                         <DropShadowEffect Color="{DynamicResource InfoBarDropShadowBackground}"
+                                           Opacity="0.35"
+                                           BlurRadius="90"/>
+                                     </controls:InfoBar.Effect>
+                                     
+                                     <controls:InfoBar.ActionButton>
+                                         <Button Cursor="Hand" IsVisible="{Binding UseButton}" 
+                                              Content="{Binding ButtonTitle}" 
+                                              Command="{Binding ButtonCommand}"
+                                              Padding="6"/>
+                                     </controls:InfoBar.ActionButton>
+                                     
+                                     <controls:InfoBar.Styles>
+                                         <Style Selector="controls|InfoBar.FadeIn">
+                                             <Style.Animations>
+                                                 <Animation Duration="0:0:0.1">
+                                                     <KeyFrame Cue="0%">
+                                                         <Setter Property="Opacity" Value="0.0"/>
+                                                     </KeyFrame>
+                                                     <KeyFrame Cue="100%">
+                                                         <Setter Property="Opacity" Value="1.0"/>
+                                                     </KeyFrame>
+                                                 </Animation>
+                                             </Style.Animations>
+                                         </Style>
+                                     </controls:InfoBar.Styles>
+                                 </controls:InfoBar>
+                             </DataTemplate>
+                         </ItemsControl.ItemTemplate>
+                     </ItemsControl>
+                </Grid>
+            </controls:NavigationView>
+            
+            <!-- Overlay Title Bar Above Navigation View -->
+            <views:TitleBar Padding="8 0 0 0" ClipToBounds="False" Margin="{DynamicResource TitleBarNegativeTopMargin}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+        </Grid>
+    </Grid>
+</Window>

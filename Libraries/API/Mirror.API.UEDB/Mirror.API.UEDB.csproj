@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPublishable>false</IsPublishable>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\Mirror\Mirror.Resources\Mirror.Resources.csproj" />
+    <ProjectReference Include="..\Mirror.API\Mirror.API.csproj" />
+  </ItemGroup>
+
+</Project>
+

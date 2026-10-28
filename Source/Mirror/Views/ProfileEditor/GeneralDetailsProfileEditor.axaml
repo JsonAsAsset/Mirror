@@ -1,0 +1,115 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enum="clr-namespace:Mirror.Converters.Enum"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+    xmlns:profileEditor="clr-namespace:Mirror.ViewModels.ProfileEditor"
+    xmlns:navigation="clr-namespace:Mirror.Controls.Navigation"
+
+    x:Class="Mirror.Views.ProfileEditor.GeneralDetailsProfileEditor"
+    x:DataType="profileEditor:ProfileEditorViewModel"
+
+    mc:Ignorable="d"
+    d:DesignWidth="700"
+    d:DesignHeight="550"
+
+    Focusable="True">
+
+    <navigation:NavigationUnboundFrame>
+        <StackPanel Margin="0" Orientation="Vertical" VerticalAlignment="Stretch">
+            <StackPanel Margin="35" Spacing="30">
+                <!-- Name + Game Engine -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="20" Opacity="{Binding AutoDetectedGameToOpacity}" IsHitTestVisible="{Binding !Profile.IsAutoDetected}">
+                    <StackPanel Orientation="Vertical" Spacing="15" Grid.Column="0">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <fluent:FluentIcon Icon="Person" FontSize="17"/>
+
+                            <TextBlock FontSize="16" VerticalAlignment="Center" TextWrapping="NoWrap" Padding="0" Margin="0">
+                                Name
+                            </TextBlock>
+                        </StackPanel>
+
+                        <TextBox
+                            Text="{Binding Profile.Name, Mode=TwoWay}"
+                            FontSize="14"
+                            Watermark="..."
+                            Padding="10 6"
+                            MinHeight="28"
+                            VerticalContentAlignment="Center"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Spacing="15" Grid.Column="1">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <fluent:FluentIcon Icon="DeveloperBoard" FontSize="17"/>
+
+                            <TextBlock FontSize="16" VerticalAlignment="Center" TextWrapping="NoWrap" Padding="0" Margin="0">
+                                Engine
+                            </TextBlock>
+                        </StackPanel>
+                        
+                        <ComboBox FontFamily="Consolas"
+                                  Height="32"
+                                  FontSize="14"
+                                  Focusable="True"
+                                  ItemsSource="{Binding GameVersionOptions}"
+                                  SelectedItem="{Binding SelectedVersionName, Mode=TwoWay}"
+                                  HorizontalAlignment="Stretch"
+                                  HorizontalContentAlignment="Left"
+                                  IsTextSearchEnabled="True"
+                                  VerticalContentAlignment="Center">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={x:Static enum:EnumToStringConverter.Instance}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Directory -->
+                <StackPanel Orientation="Vertical" Spacing="15" Opacity="{Binding AutoDetectedGameToOpacity}" IsHitTestVisible="{Binding !Profile.IsAutoDetected}">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <fluent:FluentIcon Icon="Folder" FontSize="17"/>
+
+                        <TextBlock FontSize="16" VerticalAlignment="Center" TextWrapping="NoWrap" Padding="0" Margin="0">
+                            Directory
+                        </TextBlock>
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBox Grid.Column="0" Classes="clearButton"
+                                 HorizontalAlignment="Stretch"
+                                 Text="{Binding Profile.ArchiveDirectory}"/>
+                        <Button Classes="HoverLift" Cursor="Hand" VerticalAlignment="Top" Grid.Column="1" Margin="10 0 0 0" Command="{Binding Profile.BrowseArchiveDirectoryPath}">
+                            <fluent:SymbolIcon Symbol="Folder"/>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+
+                <!-- AES Key -->
+                <StackPanel Orientation="Vertical" Spacing="15" Opacity="{Binding AutoDetectedGameToOpacity}" IsHitTestVisible="{Binding !Profile.IsAutoDetected}">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <fluent:FluentIcon Icon="Key" FontSize="17"/>
+
+                        <TextBlock FontSize="16" VerticalAlignment="Center" TextWrapping="NoWrap" Padding="0" Margin="0">
+                            AES Key
+                        </TextBlock>
+                    </StackPanel>
+
+                    <TextBox FontFamily="Consolas"
+                             Text="{Binding Profile.Encryption.MainKey, Mode=TwoWay}"
+                             HorizontalAlignment="Stretch"
+                             FontSize="14"
+                             Classes="clearButton"
+                             Padding="10 6"
+                             Height="33"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </navigation:NavigationUnboundFrame>
+</UserControl>
+

@@ -1,0 +1,61 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:FluentIcons.Avalonia;assembly=FluentIcons.Avalonia"
+    xmlns:settings="clr-namespace:Mirror.ViewModels.Settings"
+    xmlns:core="clr-namespace:Mirror.Resources;assembly=Mirror.Resources"
+
+    x:Class="Mirror.Views.Settings.DebugSettingsView"
+    x:DataType="settings:DebugSettingsViewModel"
+    
+    mc:Ignorable="d"
+    d:DesignWidth="1500"
+    d:DesignHeight="1500">
+    
+    <Grid Classes="SettingsWrapper">
+        <TextBlock Classes="SettingsHeader">Debug</TextBlock>
+            
+        <ScrollViewer Classes="SettingsScrollViewer">
+            <StackPanel Classes="SettingsStackPanel">
+                <TextBlock Classes="SettingsCategory" Text="Q1" IsVisible="{x:Static core:Globals.IS_DEBUG}"/>
+                
+                <Button Height="66" Click="OpenGallery" Classes="SettingsExpander HoverLift" IsVisible="{x:Static core:Globals.IS_DEBUG}">
+                    <StackPanel Orientation="Horizontal" Spacing="2" Margin="12 0" HorizontalAlignment="Left">
+                        <avalonia:FluentIcon
+                            Icon="PanelRightGallery"
+                            FontSize="25"
+                            IconVariant="Regular"/>
+                    
+                        <TextBlock Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="17">Open Gallery</TextBlock>
+                    </StackPanel>
+                </Button>
+                
+                <TextBlock Classes="SettingsCategory" Text="Developer Tools"/>
+                
+                <Button Height="66" Click="OpenLogsFolder" Classes="SettingsExpander HoverLift">
+                    <StackPanel Orientation="Horizontal" Margin="12 0" Spacing="2" HorizontalAlignment="Left">
+                        <avalonia:FluentIcon
+                            Icon="WindowConsole"
+                            FontSize="25"
+                            IconVariant="Regular"/>
+                    
+                        <TextBlock Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="17">Open Logs</TextBlock>
+                    </StackPanel>
+                </Button>
+                
+                <Button Height="66" Click="OpenStartup" Classes="SettingsExpander HoverLift" IsVisible="{x:Static core:Globals.IS_DEBUG}">
+                    <StackPanel Orientation="Horizontal" Spacing="2" Margin="12 0" HorizontalAlignment="Left">
+                        <avalonia:FluentIcon
+                            Icon="Open"
+                            FontSize="25"
+                            IconVariant="Regular"/>
+                    
+                        <TextBlock Padding="10" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="17">Open Startup</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

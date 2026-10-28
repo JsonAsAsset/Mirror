@@ -1,0 +1,225 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+    xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+    xmlns:views="clr-namespace:Mirror.Views.Settings"
+    xmlns:navigation="clr-namespace:Mirror.Controls.Navigation"
+    xmlns:mirror="clr-namespace:Mirror"
+    xmlns:profiles="clr-namespace:Mirror.Controls.Profiles"
+    xmlns:viewModels1="clr-namespace:Mirror.ViewModels"
+    xmlns:framework="clr-namespace:Mirror.Services.Framework"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:Mirror.Resources="clr-namespace:Mirror.Resources;assembly=Mirror.Resources"
+
+    x:Class="Mirror.Views.SettingsView"
+    x:DataType="viewModels1:SettingsViewModel"
+    
+    mc:Ignorable="d"
+    d:DesignWidth="1500"
+    d:DesignHeight="600">
+    
+    <UserControl.Styles>
+        <Style Selector="controls|Frame#ContentFrame">
+            <Setter Property="Margin" Value="45,0,0,0"/>
+        </Style>
+        
+        <Style Selector="controls|NavigationView.has-profile controls|Frame#ContentFrame">
+            <Setter Property="Margin" Value="45,30,0,0"/>
+        </Style>
+        
+        <Style Selector="controls|NavigationView /template/ ScrollViewer#MenuItemsScrollViewer">
+            <Setter Property="Margin" Value="0,0,0,2"/>
+        </Style>
+        
+        <Style Selector="controls|NavigationView /template/ controls|ItemsRepeater#MenuItemsHost">
+            <Setter Property="Margin" Value="0,20,0,20"/>
+        </Style>
+        
+        <Style Selector="controls|NavigationView.has-profile /template/ ScrollViewer#MenuItemsScrollViewer">
+            <Setter Property="Margin" Value="0,200,0,2"/>
+        </Style>
+        
+        <Style Selector="navigation|NavigationFrame.has-profile">
+            <Setter Property="Margin" Value="0,200,0,0"/>
+        </Style>
+    </UserControl.Styles>
+    
+    <Grid>
+        <!-- Background blur effect -->
+        <Border Width="250" Height="300" Margin="250 200 0 0" Opacity="0.15"
+                IsVisible="{Binding !IsOnboarding}"
+                HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="White" Offset="0"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Border.Effect>
+                <BlurEffect Radius="450"/>
+            </Border.Effect>
+        </Border>
+        
+        <navigation:NavigationFrame DisableMargin="True" Name="PaneBorder" HorizontalAlignment="Left" VerticalAlignment="Top" Width="393"/>
+        
+        <controls:NavigationView FontSize="15" Margin="20 -2 20 0" x:Name="NavigationView" Classes="NoBackground" Background="Transparent" PaneDisplayMode="Left" OpenPaneLength="350" IsPaneToggleButtonVisible="False">
+            <controls:NavigationView.MenuItems>
+                <controls:NavigationViewItem Content="Preferences" Tag="{x:Type views:ApplicationSettingsView}" IsSelected="True">
+                    <controls:NavigationViewItem.IconSource>
+                        <fluent:FluentIconSource Icon="Person" IconSize="Size32" IconVariant="Regular"/>
+                    </controls:NavigationViewItem.IconSource>
+                </controls:NavigationViewItem>
+                
+                <controls:NavigationViewItem Content="Updates" IsVisible="False" Tag="{x:Type views:UpdatesSettingsView}" IsSelected="True">
+                    <controls:NavigationViewItem.IconSource>
+                        <fluent:FluentIconSource Icon="Apps" IconSize="Size32" IconVariant="Regular"/>
+                    </controls:NavigationViewItem.IconSource>
+                </controls:NavigationViewItem>
+
+                <controls:NavigationViewItem Content="Connections" Tag="{x:Type views:ConnectionsSettingsView}">
+                    <controls:NavigationViewItem.IconSource>
+                        <fluent:FluentIconSource Icon="Connected" IconSize="Size32" IconVariant="Regular"/>
+                    </controls:NavigationViewItem.IconSource>
+                </controls:NavigationViewItem>
+                
+                <controls:NavigationViewItemHeader IsVisible="{x:Static mirror:Globals.IsReadyToMeshExport}" Content="Exports"/>
+                
+                <controls:NavigationViewItem IsVisible="{x:Static mirror:Globals.IsReadyToMeshExport}" Content="Models" Tag="{x:Type views:ModelSettingsView}">
+                    <controls:NavigationViewItem.IconSource>
+                        <fluent:FluentIconSource Icon="Cube" IconSize="Size32" IconVariant="Regular"/>
+                    </controls:NavigationViewItem.IconSource>
+                </controls:NavigationViewItem>
+                
+                <controls:NavigationViewItemHeader IsVisible="{Binding !IsOnboarding}" Content="Dev Tools"/>
+                
+                <controls:NavigationViewItem IsVisible="{Binding !IsOnboarding}" Content="Debug" Tag="{x:Type views:DebugSettingsView}">
+                    <controls:NavigationViewItem.IconSource>
+                        <fluent:FluentIconSource Icon="Beaker" IconSize="Size32" IconVariant="Regular"/>
+                    </controls:NavigationViewItem.IconSource>
+                </controls:NavigationViewItem>
+            </controls:NavigationView.MenuItems>
+            
+            <controls:Frame x:Name="ContentFrame"/>
+        </controls:NavigationView>
+        
+        <Button HorizontalAlignment="Left"
+                Name="EditProfileButton"
+                VerticalAlignment="Top"
+                Classes="GlassWhite GlassDarkerInteraction HoverLift"
+                CornerRadius="5"
+                Width="393"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch"
+                Margin="0 32 0 0"
+                Click="EditProfile"
+                IsVisible="False"
+                Focusable="False"
+                IsDefault="False"
+                ClipToBounds="False"
+                Height="144">
+            
+            <Grid Background="Transparent">
+                <Grid Opacity="1" IsVisible="True" HorizontalAlignment="Left">
+                    <Border
+                        Opacity="{Binding Source={x:Static framework:AppServices.MainWM}, Path=TitleBarOpacity}"
+                        Background="{Binding Source={x:Static framework:AppServices.MainWM}, Path=CurrentProfile.Display.GradientBrush}"
+                        Height="60"
+                        Width="70"
+                        Margin="25 25 0 140">
+                        <Border.Effect>
+                            <BlurEffect Radius="50"/>
+                        </Border.Effect>
+                    </Border>
+                </Grid>
+                
+                <Grid DataContext="{Binding CurrentProfile}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <profiles:ProfileSplashControl
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        IgnoreLoading="True"
+                        Radius="35"
+                        Margin="15 -28 0 0"
+                        SplashScale="3"/>
+                </Grid>
+                
+                <TextBlock Margin="15 78 0 0" HorizontalAlignment="Left" FontSize="35" FontWeight="DemiBold" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="270" Text="{Binding CurrentProfile.Name}"></TextBlock>
+                
+                <fluent:FluentIcon
+                    Icon="PersonEdit"
+                    HorizontalAlignment="Right"
+                    IconSize="Size32"
+                    Margin="0 0 25 0" FontSize="35"
+                    IconVariant="Regular"/>
+            </Grid>
+        </Button>
+                    
+        <!-- Version Button -->
+        <Button IsVisible="{x:Static mirror:Globals.ShowVersion}" Margin="20" Height="33" HorizontalAlignment="Left" VerticalAlignment="Bottom" Classes="SoftHoverLift">
+            <Button.Flyout>
+                <Flyout Placement="Bottom" VerticalOffset="3">
+                    <StackPanel Spacing="15" Margin="5">
+                        <StackPanel Orientation="Horizontal" Spacing="12" Margin="0 0 8 0">
+                            <Border Width="40" Height="40" CornerRadius="10" Background="Black" BorderThickness="1" BorderBrush="#1f2023">
+                                <Image
+                                    Source="/Assets/Icon/Scaled/App.Icon.32.png"
+                                    Width="20"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    IsHitTestVisible="False"
+                                    Margin="0 0 0 0"/>
+                            </Border>
+
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="2">
+                                <TextBlock FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{x:Static Mirror.Resources:Globals.VERSION}"/>
+                                <TextBlock IsVisible="{x:Static Mirror.Resources:Globals.IS_COMMIT_AVAILABLE}" FontSize="12" Opacity="0.5" Text="{x:Static Mirror.Resources:Globals.COMMIT}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+                            <Button Click="CopyGitCloneCommand" Cursor="Hand" Classes="AccentHighlight HoverLift" Height="30">
+                                <ToolTip.Tip>
+                                    <StackPanel MaxWidth="250">
+                                        <TextBlock>
+                                            Copies a one-line Git command that:
+                                        </TextBlock>
+                                        <TextBlock>
+                                            - Clones this repo
+                                        </TextBlock>
+                                        <TextBlock IsVisible="{x:Static Mirror.Resources:Globals.IS_COMMIT_AVAILABLE}">
+                                            - Checks out this commit
+                                        </TextBlock>
+                                        <TextBlock>
+                                            - Initializes submodules
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ToolTip.Tip>
+
+                                <avalonia:MaterialIcon Kind="Git"/>
+                            </Button>
+                            
+                            <Button ToolTip.Tip="View Commit" Classes="AccentHighlight HoverLift" IsVisible="{x:Static Mirror.Resources:Globals.IS_COMMIT_AVAILABLE}" Click="OpenGitHubLink" Height="30">
+                                <avalonia:MaterialIcon Kind="Github"/>
+                            </Button>
+                            
+                            <Button ToolTip.Tip="View License" Classes="AccentHighlight HoverLift" Click="OpenGitHubLicense" Height="30">
+                                <avalonia:MaterialIcon Kind="Legal"/>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Flyout>
+            </Button.Flyout>
+            
+            <StackPanel Cursor="Hand" Orientation="Horizontal" Spacing="10" Background="Transparent">
+                <Image
+                    Source="/Assets/Icon/Scaled/App.Icon.32.png"
+                    Width="14"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsHitTestVisible="False"
+                    Margin="3 0 3 0"/>
+            </StackPanel>
+        </Button>
+    </Grid>
+</UserControl>

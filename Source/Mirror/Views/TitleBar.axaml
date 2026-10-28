@@ -1,0 +1,180 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    
+    xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+    xmlns:avalonia="clr-namespace:FluentIcons.Avalonia;assembly=FluentIcons.Avalonia"
+    xmlns:windowModels="clr-namespace:Mirror.WindowModels"
+    xmlns:profiles="clr-namespace:Mirror.Controls.Profiles"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:Mirror.Resources="clr-namespace:Mirror.Resources;assembly=Mirror.Resources"
+    xmlns:window="clr-namespace:Mirror.Controls.Window"
+    xmlns:mirror="clr-namespace:Mirror"
+
+    x:Class="Mirror.Views.TitleBar"
+    x:DataType="windowModels:MainWindowModel"
+    
+    mc:Ignorable="d"
+    d:DesignWidth="900"
+    d:DesignHeight="150">
+
+    <window:BaseTitleBar>
+        <window:BaseTitleBar.LeftItems>
+            <TextBlock IsVisible="{Binding DoesProfileExist}" IsHitTestVisible="False" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Opacity="0.1" Text="/"/>
+            
+            <Grid Name="ProfileContainer" IsVisible="{Binding DoesProfileExist}">
+                <!-- 
+                
+                Title Bar Gradient
+                -->
+                <Grid Opacity="1" Name="TitleBarGradient" IsVisible="True">
+                    <Border Margin="25 0 25 0" Opacity="{Binding TitleBarOpacity}" Background="{Binding TitleBarSecondGradientBrush}" HorizontalAlignment="Stretch" Height="25">
+                        <Border.Effect>
+                            <BlurEffect Radius="75"/>
+                        </Border.Effect>
+                    </Border>
+                </Grid>
+                
+                <!-- Profile Button -->
+                <Button Click="EditProfile" Classes="SoftHoverLift" ClipToBounds="False" Name="Profile" Opacity="{Binding ProfileButtonOpacity}" BorderThickness="0" Padding="10 0 10 0" Background="Transparent" CornerRadius="25">
+                    <Button.Resources>
+                        <ResourceDictionary>
+                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Transparent</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonBackgroundPressed">Transparent</SolidColorBrush>
+                        </ResourceDictionary>
+                    </Button.Resources>
+                    
+                    <StackPanel Orientation="Horizontal" Spacing="12" Background="Transparent" Cursor="Hand">
+                        <profiles:ProfileSplashControl ZIndex="1" Radius="12" SplashScale="1.35" DataContext="{Binding CurrentProfile}"/>
+
+                        <!-- Display Name -->
+                        <Grid IsHitTestVisible="False">
+                            <Grid x:Name="ProfileHoverGlow" Opacity="0" ZIndex="-1" IsVisible="True">
+                                <Border Margin="-35 0 -35 0" Opacity="0.45" Background="{Binding TitleBarSecondGradientBrush}" HorizontalAlignment="Stretch" Height="35">
+                                    <Border.Effect>
+                                        <BlurEffect Radius="150"/>
+                                    </Border.Effect>
+                                </Border>
+                            </Grid>
+
+                            <TextBlock Name="ProfileName" MaxWidth="250" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding ProfileDisplayName}" FontSize="18" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                        </Grid>
+                    </StackPanel>
+                </Button>
+            </Grid>
+            
+            <Grid IsVisible="{Binding CanLinkProfile}">
+                <Grid x:Name="LinkHoverGlow" Opacity="0" ZIndex="-1" IsVisible="True">
+                    <Border Margin="-35 0 -35 0" Opacity="0.5" Width="35" Background="#0095ff" HorizontalAlignment="Stretch" Height="35">
+                        <Border.Effect>
+                            <BlurEffect Radius="90"/>
+                        </Border.Effect>
+                    </Border>
+                </Grid>
+                
+                <!-- Link Button -->
+                <Button Click="Link_OnClick" Name="Link" Opacity="0.8" IsVisible="{x:Static mirror:Globals.ShowVersion}" Background="Transparent" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Classes="HoverLift">
+                    <ToolTip.Tip>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Link a profile to redirect assets that contain editor-only data to builds that include editor-only data</TextBlock>
+                        </StackPanel>
+                    </ToolTip.Tip>
+                    
+                    <StackPanel Cursor="Hand" Orientation="Horizontal" Spacing="10" Background="Transparent">
+                        <avalonia1:MaterialIcon FontSize="18" Kind="Link" Margin="0 5 0 0"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+            
+            <!-- Link Button -->
+            <Button Click="Button_OnClick" Opacity="0.8" IsVisible="{Binding DoesLinkedProfileExist}" Background="Transparent" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Classes="HoverLift">
+                <ToolTip.Tip>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Un-link profile</TextBlock>
+                    </StackPanel>
+                </ToolTip.Tip>
+                    
+                <StackPanel Cursor="Hand" Orientation="Horizontal" Spacing="10" Background="Transparent">
+                    <avalonia1:MaterialIcon Margin="0 5 0 0" FontSize="15" Kind="LinkVariantRemove"/>
+                </StackPanel>
+            </Button>
+            
+            <Grid IsVisible="{Binding DoesLinkedProfileExist}">
+                <!-- Linked Profile Button -->
+                <Button Click="EditLinkedProfile" Classes="SoftHoverLift" ClipToBounds="False" Name="LinkedProfile" Opacity="{Binding ProfileButtonOpacity}" BorderThickness="0" Padding="10 5 10 5" Background="Transparent" CornerRadius="25">
+                    <Button.Resources>
+                        <ResourceDictionary>
+                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Transparent</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonBackgroundPressed">Transparent</SolidColorBrush>
+                        </ResourceDictionary>
+                    </Button.Resources>
+                    
+                    <StackPanel Orientation="Horizontal" Spacing="12" Background="Transparent" Cursor="Hand">
+                        <profiles:ProfileSplashControl ZIndex="1" Radius="8" SplashScale="1" DataContext="{Binding LinkedProfile}"/>
+
+                        <!-- Display Name -->
+                        <Grid IsHitTestVisible="False">
+                            <Grid x:Name="LinkedProfileHoverGlow" Opacity="0" ZIndex="-1" IsVisible="True">
+                                <Border Margin="-35 0 -35 0" Opacity="0.3" Background="{Binding TitleBarSecondGradientBrush}" HorizontalAlignment="Stretch" Height="35">
+                                    <Border.Effect>
+                                        <BlurEffect Radius="150"/>
+                                    </Border.Effect>
+                                </Border>
+                            </Grid>
+
+                            <TextBlock Name="LinkedProfileName" MaxWidth="250" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" 
+                                       Text="{Binding LinkedProfileDisplayName}" FontSize="17" FontWeight="DemiBold" 
+                                       VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                        </Grid>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </window:BaseTitleBar.LeftItems>
+
+        <window:BaseTitleBar.RightContent>
+            <!-- Content Control depending on what tab is open -->
+            <ContentControl ClipToBounds="False" Content="{Binding CurrentToolbarContent}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            
+            <StackPanel IsVisible="False" Orientation="Horizontal" Spacing="10" ClipToBounds="False">
+                <!-- Cloud -->
+                <Button Name="Cloud" ClipToBounds="False" IsVisible="{Binding IsAPIServiceEnabled}" Height="40" Background="Transparent" CornerRadius="8" Classes="HoverLift">
+                    <ToolTip.Tip>
+                        <StackPanel Orientation="Vertical" Spacing="3" Margin="5">
+                            <TextBlock VerticalAlignment="Center" FontWeight="Medium">Cloud</TextBlock>
+                            <TextBlock VerticalAlignment="Center" Opacity="0.4" MaxWidth="200" FontSize="13">Locally hosted API to interact with UEParse</TextBlock>
+                        </StackPanel>
+                    </ToolTip.Tip>
+                    
+                    <Button.Flyout>
+                        <Flyout>
+                            <StackPanel Spacing="8">
+                                <Button Classes="SoftHoverLift" Click="RestartAPI" Cursor="Hand" HorizontalAlignment="Stretch" Padding="10 0" Height="40" Background="Transparent" CornerRadius="8" HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
+                                    <Button.Resources>
+                                        <ResourceDictionary>
+                                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#10FFFFFF"/>
+                                            <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#1f1f1f"/>
+                                        </ResourceDictionary>
+                                    </Button.Resources>
+                                    
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <avalonia:FluentIcon FontSize="20" Icon="CloudSync"/>
+                                    
+                                        <TextBlock FontWeight="Light" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            Resync
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                    
+                    <Grid Cursor="Hand" Background="Transparent" ClipToBounds="False">
+                        <avalonia:FluentIcon FontSize="21" Icon="{Binding APIServiceIcon}" Foreground="{Binding APIServiceStatusColor}"/>
+                    </Grid>
+                </Button>
+            </StackPanel>
+        </window:BaseTitleBar.RightContent>
+    </window:BaseTitleBar>
+</UserControl>

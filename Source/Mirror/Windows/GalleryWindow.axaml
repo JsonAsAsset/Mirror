@@ -1,0 +1,97 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:windowModels="clr-namespace:Mirror.WindowModels"
+
+    x:Class="Mirror.Windows.GalleryWindow"
+    x:DataType="windowModels:GalleryWindowModel"
+
+    Title="{Binding Title}"
+    
+    Width="680" Height="650"
+    CanResize="False"
+    
+    mc:Ignorable="d"
+    
+    d:DesignWidth="680"
+    d:DesignHeight="650">
+    
+    <Window.Styles>
+        <Style Selector="CaptionButtons">
+            <Setter Property="Height" Value="45"/>
+        </Style>
+        
+        <Style Selector="CaptionButtons Button#PART_RestoreButton">
+            <Setter Property="IsVisible" Value="False"/>
+        </Style>
+        
+        <Style Selector="CaptionButtons Button#PART_MinimizeButton">
+            <Setter Property="IsVisible" Value="False"/>
+        </Style>
+    </Window.Styles>
+    
+    <Grid Margin="{Binding $parent[Window].OffScreenMargin}">
+        <Grid>
+            <!-- Background blur effect -->
+            <Border Height="50" Margin="200 0 200 0" Opacity="1"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="White" Offset="0"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.Effect>
+                    <BlurEffect Radius="450"/>
+                </Border.Effect>
+            </Border>
+            
+            <!-- Stretch, not Top. Sized to its content this grew past the window bottom and ran
+                 the text under the action buttons once the description got longer. -->
+            <Grid VerticalAlignment="Stretch">
+                <StackPanel Margin="32 0 32 100" Spacing="20" VerticalAlignment="Bottom">
+                    <Border IsVisible="{Binding Tag}" Background="{Binding TagBackground}" CornerRadius="10" HorizontalAlignment="Left" Padding="10">
+                        <TextBlock Name="TagText" Text="{Binding TagText}" FontSize="15" Foreground="{Binding TagForeground}"/>
+                    </Border>
+
+                    <TextBlock Name="Title" Text="{Binding Title}" FontSize="37" FontWeight="Bold"/>
+
+                    <!-- Cap is generous so a multi paragraph change list isn't cut off, the short
+                         descriptions on the update and developmental windows are unaffected -->
+                    <TextBlock Name="Description" Text="{Binding Description}" TextWrapping="Wrap" LineHeight="25" MaxHeight="230" TextTrimming="CharacterEllipsis" Foreground="#969696" FontSize="20"/>
+                </StackPanel>
+            </Grid>
+
+            <UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Rows="1" ColumnSpacing="10" Margin="32">
+                <Button Content="{Binding SecondaryButtonText}"
+                        Classes="ContentSecondary SoftHoverLift"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        CornerRadius="4"
+                        Click="Close"
+                        IsDefault="{Binding !PrimaryButtonEnabled}"
+                        IsVisible="{Binding SecondaryButtonEnabled}"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"/>
+                
+                <Button Content="{Binding PrimaryButtonText}"
+                        Classes="ContentPrimary SoftHoverLift"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        CornerRadius="4"
+                        Click="PrimaryButtonClick"
+                        IsDefault="{Binding PrimaryButtonEnabled}"
+                        IsVisible="{Binding PrimaryButtonEnabled}"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"/>
+            </UniformGrid>
+
+            <Grid HorizontalAlignment="Right" VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                    <CaptionButtons Name="captionButtons"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

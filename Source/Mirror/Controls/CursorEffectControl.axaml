@@ -1,0 +1,21 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Mirror.Controls.CursorEffectControl"
+    
+    IsHitTestVisible="False">
+    
+    <Canvas x:Name="CursorCanvas" Opacity="0.8" ClipToBounds="False">
+        <Ellipse x:Name="CursorCircle" 
+                 Width="120" 
+                 Height="120"
+                 ClipToBounds="False"
+                 Fill="#15FFFFFF"
+                 Opacity="0"
+                 IsVisible="False">
+            <Ellipse.Effect>
+                <BlurEffect Radius="90"/>
+            </Ellipse.Effect>
+        </Ellipse>
+    </Canvas>
+</UserControl>

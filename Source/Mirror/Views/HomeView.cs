@@ -1,0 +1,234 @@
+using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Animation.Easings;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Threading;
+using Mirror.Framework.Models;
+using Mirror.Models.Profiles;
+using Mirror.Services;
+using Mirror.ViewModels;
+using Mirror.Views.Profiles;
+
+namespace Mirror.Views;
+
+public partial class HomeView : ViewBase<HomeViewModel>
+{
+    private Profile? _currentProfile;
+    
+    public HomeView()
+    {
+        InitializeComponent();
+        
+        MainWM.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(MainWM.CurrentProfile))
+            {
+                if (_currentProfile != null)
+                {
+                    _currentProfile.OnInitialized -= Profile_PropertyChanged;
+                }
+
+                _currentProfile = MainWM.CurrentProfile;
+
+                if (_currentProfile != null)
+                {
+                    _currentProfile.OnInitialized += Profile_PropertyChanged;
+                }
+
+                Dispatcher.UIThread.Post(UpdatePrompt);
+            }
+        };
+        
+        ViewModel.StartRotation(ViewModel.TagLines, 2700, RotatingTaglineText, useRandom: true);
+    }
+    
+    private void Profile_PropertyChanged(Profile profile)
+    {
+        Dispatcher.UIThread.Post(UpdatePrompt);
+    }
+
+    private void OpenDiscord(object? sender, RoutedEventArgs e)
+    {
+        AppService.OpenLink(DISCORD_LINK);
+    }
+
+    private void OpenGitHub(object? sender, RoutedEventArgs e)
+    {
+        AppService.OpenLink(GITHUB_LINK);
+    }
+
+    private void OpenXAccount(object? sender, RoutedEventArgs e)
+    {
+        AppService.OpenLink(X_LINK);
+    }
+
+    private void OpenKoFi(object? sender, RoutedEventArgs e)
+    {
+        AppService.OpenLink(DONATE_LINK);
+        Donate_OnPointerPressed(sender);
+    }
+    
+    private void OpenReflection(object? sender, RoutedEventArgs e)
+    {
+        AppService.OpenLink("https://github.com/JsonAsAsset/Reflection");
+    }
+
+    private void GetStarted(object? sender, RoutedEventArgs e)
+    {
+        Navigation.App.Open(typeof(ProfileSelectionView));
+    }
+
+    static bool IsStarAnimationPlaying;
+    
+    private async void Donate_OnPointerPressed(object? sender)
+    {
+        if (IsStarAnimationPlaying) return;
+        
+        if (StarScale?.RenderTransform is not ScaleTransform StarTransform)
+        {
+            return;
+        }
+
+        const double startScale = 1.0;
+        const double endScale = 10.0;
+        const double durationMs = 400;
+        const int stepMs = 6;
+        
+        StarScale.Opacity = 1.0;
+
+        var startOpacity = StarScale.Opacity;
+        const double endOpacity = 0.0;
+
+        double elapsed = 0;
+        
+        IsStarAnimationPlaying = true;
+
+        while (elapsed < durationMs)
+        {
+            var time = elapsed / durationMs;
+            var eased = new CubicEaseOut().Ease(time);
+
+            var currentScale = startScale + (endScale - startScale) * eased;
+            var currentOpacity = startOpacity + (endOpacity - startOpacity) * eased;
+
+            StarTransform.ScaleX = currentScale;
+            StarTransform.ScaleY = currentScale;
+            StarScale.Opacity = currentOpacity;
+
+            await Task.Delay(stepMs);
+            
+            elapsed += stepMs;
+        }
+
+        StarTransform.ScaleX = 1.0;
+        StarTransform.ScaleY = 1.0;
+        
+        StarScale.Opacity = 0.0;
+        
+        IsStarAnimationPlaying = false;
+    }
+
+    private void Donate_OnPointerEntered(object? sender, PointerEventArgs e)
+    {
+        Donate_OnPointerPressed(sender);
+    }
+    
+    static bool IsLogoAnimationPlaying;
+    
+    private async void PlayLogoAnimation()
+    {
+        if (IsLogoAnimationPlaying) return;
+        
+        if (Logo?.RenderTransform is not ScaleTransform Transform)
+        {
+            return;
+        }
+
+        const double startScale = 1.0;
+        const double endScale = 3.5;
+        const double durationMs = 30;
+        const int stepMs = 1;
+
+        Logo.Opacity = 1.0;
+
+        var startOpacity = Logo.Opacity;
+        const double endOpacity = 0.0;
+
+        double elapsed = 0;
+        
+        IsLogoAnimationPlaying = true;
+
+        while (elapsed < durationMs)
+        {
+            var time = elapsed / durationMs;
+            var eased = new CubicEaseOut().Ease(time);
+
+            var currentScale = startScale + (endScale - startScale) * eased;
+            var currentOpacity = startOpacity + (endOpacity - startOpacity) * eased;
+
+            Transform.ScaleX = currentScale;
+            Transform.ScaleY = currentScale;
+            Logo.Opacity = currentOpacity;
+
+            await Task.Delay(stepMs);
+            
+            elapsed += stepMs;
+        }
+
+        Transform.ScaleX = 1.0;
+        Transform.ScaleY = 1.0;
+        
+        Logo.Opacity = 0.0;
+        
+        IsLogoAnimationPlaying = false;
+    }
+    
+    private static readonly Random _random = new();
+
+    private void InputElement_OnPointerEntered(object? sender, PointerEventArgs e)
+    {
+        if (_random.NextDouble() <= 0.1)
+        {
+            PlayLogoAnimation();
+        }
+    }
+
+    private static readonly string[] ReadyPrompts =
+    [
+        "you're all set!",
+        "look at you go!",
+        "we're so back.",
+        "準備ができました！"
+    ];
+    
+    private void UpdatePrompt()
+    {
+        TagLineContainer.IsVisible = MainWM.CurrentProfile is not null;
+        ButtonContainer.IsVisible = MainWM.CurrentProfile is null;
+
+        if (MainWM.CurrentProfile is not null)
+        {
+            if (MainWM.CurrentProfile.IsInitialized)
+            {
+                Prompt.Text = ReadyPrompts[Random.Shared.Next(ReadyPrompts.Length)];
+            }
+            else
+            {
+                Prompt.Text = "just a moment…";
+            }
+        }
+        else
+        {
+            Prompt.Text = "start a profile!";
+        }
+    }
+
+    private void Visual_OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        DispatcherTimer.RunOnce(() => PlayLogoAnimation(), TimeSpan.FromSeconds(0.1));
+    }
+}

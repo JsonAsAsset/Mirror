@@ -1,0 +1,126 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:extensions="clr-namespace:Mirror.Resources.Extensions;assembly=Mirror.Resources"
+    xmlns:texture="clr-namespace:CUE4Parse.UE4.Assets.Exports.Texture;assembly=CUE4Parse"
+    xmlns:base="clr-namespace:Mirror.Resources.Framework.Base;assembly=Mirror.Resources"
+    xmlns:avalonia="clr-namespace:FluentIcons.Avalonia;assembly=FluentIcons.Avalonia"
+    xmlns:profileEditor="clr-namespace:Mirror.ViewModels.ProfileEditor"
+    xmlns:navigation="clr-namespace:Mirror.Controls.Navigation"
+    xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+
+    x:Class="Mirror.Views.ProfileEditor.AdvancedProfileEditor"
+    x:DataType="profileEditor:ProfileEditorViewModel"
+
+    mc:Ignorable="d"
+    d:DesignWidth="700"
+    d:DesignHeight="550"
+
+    Focusable="True">
+
+    <navigation:NavigationUnboundFrame>
+        <StackPanel Margin="0" Orientation="Vertical" VerticalAlignment="Stretch">
+            <StackPanel Margin="35" Spacing="22">
+                <!-- Override Mappings -->
+                <StackPanel Orientation="Vertical" Spacing="10">
+                    <Border Background="{DynamicResource ExpanderHeaderBackground}" BorderBrush="{DynamicResource ExpanderHeaderBorderBrush}" BorderThickness="1" CornerRadius="5">
+                        <Grid Margin="28">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+                                    <StackPanel>
+                                        <avalonia:FluentIcon HorizontalAlignment="Left" Opacity="0.8" Icon="Database" FontSize="25"/>
+                                    </StackPanel>
+                            
+                                    <StackPanel Orientation="Vertical" Spacing="3">
+                                        <TextBlock Text="Override Mappings File" FontSize="16" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Use custom mapping configurations" FontSize="14" Opacity="0.7" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                
+                                <Grid Margin="0 20 0 0" ColumnDefinitions="*,Auto" IsVisible="{Binding Profile.MappingsContainer.Override, Mode=TwoWay, FallbackValue=''}">
+                                    <TextBox Grid.Column="0"
+                                             HorizontalAlignment="Stretch"
+                                             Classes="clearButton"
+                                             Text="{Binding Profile.MappingsContainer.Path}"/>
+                        
+                                    <Button Classes="HoverLift" Cursor="Hand" VerticalAlignment="Top" Grid.Column="1" Margin="10 0 0 0" Command="{Binding Profile.BrowseMappingsPathFile}">
+                                        <avalonia:SymbolIcon Symbol="Document"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+                            
+                            <ToggleSwitch
+                                IsChecked="{Binding Profile.MappingsContainer.Override, Mode=TwoWay, FallbackValue=''}"
+                                Cursor="Hand"
+                                Width="40"
+                                Margin="0 0 0 0"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Right"
+                                OffContent=""
+                                OnContent=""/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+                
+                <!-- Textures On Demand -->
+                <StackPanel Orientation="Vertical" Spacing="10">
+                    <Border Background="{DynamicResource ExpanderHeaderBackground}" BorderBrush="{DynamicResource ExpanderHeaderBorderBrush}" BorderThickness="1" CornerRadius="5">
+                        <Grid Margin="28">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+                                <StackPanel>
+                                    <avalonia:FluentIcon HorizontalAlignment="Left" Opacity="0.8" Icon="CloudArrowDown" FontSize="25"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Vertical" Spacing="3">
+                                    <TextBlock Text="Stream High Resolution Textures" FontSize="16" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Mount the on demand containers holding the mips left out of the installation" FontSize="14" Opacity="0.7" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <ToggleSwitch
+                                IsChecked="{Binding Profile.TexturesOnDemand, Mode=TwoWay, FallbackValue=''}"
+                                Cursor="Hand"
+                                Width="40"
+                                Margin="0 0 0 0"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Right"
+                                OffContent=""
+                                OnContent=""/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Opacity="{Binding AutoDetectedGameToOpacity}"
+                            IsHitTestVisible="{Binding !Profile.IsAutoDetected}"
+                            Orientation="Vertical" Spacing="15">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <fluent:FluentIcon Icon="CircleShadow" FontSize="17"/>
+
+                        <TextBlock VerticalAlignment="Center" FontSize="16" TextWrapping="NoWrap" Padding="0" Margin="0">
+                            Texture Platform
+                        </TextBlock>
+                    </StackPanel>
+
+                    <ComboBox HorizontalAlignment="Stretch" Cursor="Hand" ItemsSource="{extensions:EnumToItemsSource {x:Type texture:ETexturePlatform}}" SelectedItem="{Binding Profile.TexturePlatform, Converter={StaticResource EnumToRecord}}"/>
+                </StackPanel>
+                
+                <StackPanel Opacity="{Binding AutoDetectedGameToOpacity}"
+                            IsHitTestVisible="{Binding !Profile.IsAutoDetected}"
+                            Orientation="Vertical" Spacing="15">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <fluent:FluentIcon Icon="SoundWaveCircle" FontSize="17"/>
+
+                        <TextBlock VerticalAlignment="Center" FontSize="16" TextWrapping="NoWrap" Padding="0" Margin="0">
+                            Audio Format
+                        </TextBlock>
+                    </StackPanel>
+                    
+                    <ComboBox HorizontalAlignment="Stretch" Cursor="Hand" ItemsSource="{extensions:EnumToItemsSource {x:Type base:EAudioFormatType}}" SelectedItem="{Binding Profile.AudioFormat, Converter={StaticResource EnumToRecord}}"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </navigation:NavigationUnboundFrame>
+</UserControl>
+
