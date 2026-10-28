@@ -1,19 +1,12 @@
-<div align="center">
-   <a href="https://github.com/JsonAsAsset/Core">
-      <img src="https://github.com/user-attachments/assets/7b63e502-3d05-4e44-b812-dcce708d6d04" width="824.652778" height="496.527778"/>
-   </a>
-</div>
+### Description
+Mirror is an **extension** of [Reflection](https://github.com/JsonAsAsset/Reflection) that fetches almost every referenced asset for you, hands-free.
 
-</br>
-   <div align="center">
-      
+<div> 
+   
    [![Discord](https://img.shields.io/badge/Join%20Discord-Collector?color=black&logo=discord&logoColor=white&style=for-the-badge)](https://discord.gg/xXEw4jc2UT)
    [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Ko--fi?color=black&logo=ko-fi&logoColor=white&style=for-the-badge)](https://ko-fi.com/tectory)
    [![Releases](https://img.shields.io/github/downloads/JsonAsAsset/Core/total?style=for-the-badge&color=black&label=Downloads)](https://github.com/JsonAsAsset/Core/releases)
 </div>
-
-### Description
-Mirror is an **extension** of [Reflection](https://github.com/JsonAsAsset/Reflection) that fetches almost every referenced asset for you, hands-free.
 
 ### Licensing
 
