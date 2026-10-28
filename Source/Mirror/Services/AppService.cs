@@ -140,8 +140,22 @@ public class AppService : IService
         }
         
         jumpList.AddCustomCategories(recentCategory);
-        jumpList.Refresh();
-        
-        Log.Information($"Updated Recent Jump List");
+
+        /* Windows refuses custom categories while the reader has recently opened items turned off,
+         * which is theirs to decide and not something to fail a window close over. */
+        try
+        {
+            jumpList.Refresh();
+
+            Log.Information($"Updated Recent Jump List");
+        }
+        catch (UnauthorizedAccessException)
+        {
+            Log.Information("Skipped the jump list, Windows has recent items turned off");
+        }
+        catch (Exception exception)
+        {
+            Log.Warning($"Could not update the jump list: {exception.Message}");
+        }
     }
 }
