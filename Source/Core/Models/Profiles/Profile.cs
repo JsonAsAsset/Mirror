@@ -265,7 +265,19 @@ public class Profile : BaseProfileDisplay
     {
         if (ArchiveDirectory.Length != 0)
         {
-            Provider = new BaseProvider(ArchiveDirectory, new VersionContainer(Version, TexturePlatform));
+            /* Fortnite ships off ue5-main, so a build can carry a layout from after the engine version
+             * it reports. 24.20 writes the bulk data map that UE 5.2 added while its custom versions
+             * are still 5.1's, and reading it as 5.2 outright pulls in changes it has not got. */
+            var packageVersion = PackageVersionUE5 > 0
+                ? new FPackageFileVersion((int) EUnrealEngineObjectUE4Version.AUTOMATIC_VERSION, PackageVersionUE5)
+                : default;
+
+            if (PackageVersionUE5 > 0)
+            {
+                Log.Information($"Reading {Name} at package version {PackageVersionUE5}, over what {Version} implies");
+            }
+
+            Provider = new BaseProvider(ArchiveDirectory, new VersionContainer(Version, TexturePlatform, packageVersion));
         }
         
         var onDemandPlugin = Plugins.OfType<IOnDemandPlugin>().FirstOrDefault();
@@ -614,6 +626,7 @@ public class Profile : BaseProfileDisplay
             MappingsContainer = MappingsContainer.Clone(),
             Encryption = Encryption.Clone(),
             Version = Version,
+            PackageVersionUE5 = PackageVersionUE5,
             FileName = FileName,
             AutoDetectedGameId = AutoDetectedGameId,
             PakFileEntries = [..PakFileEntries],
@@ -646,6 +659,7 @@ public class Profile : BaseProfileDisplay
         MappingsContainer = other.MappingsContainer;
         Encryption = other.Encryption;
         Version = other.Version;
+        PackageVersionUE5 = other.PackageVersionUE5;
         FileName = other.FileName;
         AutoDetectedGameId = other.AutoDetectedGameId;
         PakFileEntries = new List<BasePakFileEntry>(other.PakFileEntries);

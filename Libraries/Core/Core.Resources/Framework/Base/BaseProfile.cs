@@ -120,6 +120,11 @@ public partial class BaseProfile : ObservableValidator
     
     [ObservableProperty] private EGame _version = EGame.GAME_UE5_LATEST;
     
+    /* A package file version to read with, where the build carries a layout its engine version does
+     * not imply. Zen packages are unversioned, so this is the only way to say so. Zero reads the
+     * version the game implies. */
+    [ObservableProperty] private int _packageVersionUE5;
+
     [ObservableProperty] private ETexturePlatform _texturePlatform = ETexturePlatform.DesktopMobile;
     
     [ObservableProperty] private EAudioFormatType _audioFormat = EAudioFormatType.Decompressed;
