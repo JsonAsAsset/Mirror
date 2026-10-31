@@ -20,6 +20,11 @@ public partial class CloudApiController
     public static Func<BaseProfile, CancellationToken, Task>? StartBuildAsync;
     public static Action<BaseProfile>? StopBuild;
 
+    /* Which build the app has open is the app's own, and its window follows it, so changing that
+     * is asked of the app rather than done to the controller behind its back. Unset, the switch
+     * cannot be made from outside at all. */
+    public static Action<BaseProfile>? SwitchToBuild;
+
     /* When each build was last asked for something, so one nobody is reading can be let go */
     private static readonly ConcurrentDictionary<string, DateTime> BuildLastUsed = new(StringComparer.OrdinalIgnoreCase);
 
@@ -197,6 +202,56 @@ public partial class CloudApiController
             loaded = profile.IsInitialized,
             files = profile.Provider?.Files.Count ?? 0
         });
+    }
+
+    /* Makes one the build the app is showing, which is the one everything answers for when the
+     * path does not name another.
+     *
+     * Asked for rather than waited on. The app opens a profile on a task of its own and its window
+     * moves with it, so the answer says the switch is under way and whoever asked watches metadata
+     * for it to land. */
+    [HttpPost("builds/{named}/use")]
+    public ActionResult UseBuild(string named)
+    {
+        if (EnumerateBuilds is null || SwitchToBuild is null) return NoBuildsResponse;
+
+        var matches = BuildsNamed(named);
+
+        if (matches.Count == 0) return NotFoundResponse;
+        if (matches.Count > 1) return AmbiguousBuildResponse;
+
+        var profile = matches[0];
+
+        TouchBuild(profile);
+
+        /* Already the one open and already readable, so there is nothing to switch to */
+        if (ReferenceEquals(profile, MainProfile) && profile.IsInitialized)
+        {
+            return new JsonResult(new { name = profile.Name, loaded = true, switching = false, alreadyOpen = true });
+        }
+
+        try
+        {
+            SwitchToBuild(profile);
+        }
+        catch (Exception exception)
+        {
+            Log.Warning($"[Mirror.Cloud]: Could not switch to {profile.Name}: {exception.Message}");
+
+            return new JsonResult(new
+            {
+                errorCode = "cloud.builds.failed",
+                errorMessage = exception.Message,
+                numericErrorCode = 1004
+            })
+            {
+                StatusCode = StatusCodes.Status500InternalServerError
+            };
+        }
+
+        StartIdleSweep();
+
+        return new JsonResult(new { name = profile.Name, loaded = profile.IsInitialized, switching = true });
     }
 
     /* Lets one go. The one the app is showing stays, since closing it out from under the reader

@@ -101,6 +101,16 @@ public class CloudService : IService
             }
         };
 
+        CloudApiController.SwitchToBuild = profile =>
+        {
+            if (profile is not Profile known) return;
+
+            /* The same way the window's own list opens one, so what the app is showing and what
+             * the API answers for stay the same thing. It loads on a task of its own, which is
+             * why nothing here waits for it. */
+            Dispatcher.UIThread.Post(() => _ = MainWM.StartProfileAsync(known));
+        };
+
         CloudApiController.StartIdleSweep();
     }
 

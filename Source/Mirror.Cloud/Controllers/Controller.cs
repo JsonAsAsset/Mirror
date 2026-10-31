@@ -117,23 +117,29 @@ public partial class CloudApiController : ControllerBase
     [HttpGet("metadata")]
     public ActionResult Get()
     {
-        if (!IsBaseProfileReady) return NotInitializedResponse;
-        
-        var enumName = Enum.GetName(typeof(EGame), MainProfile?.Version!);
+        /* A reader pinned to one build is told about that one rather than about whatever the app
+         * is showing. The project its files came out of and the engine they were cooked by are
+         * what every path is spelled with, and the main profile's are not that build's. */
+        var profile = RouteBuild(out var routeError) ?? MainProfile;
+
+        if (routeError is not null) return routeError;
+        if (profile is null || !profile.IsInitialized || profile.Provider.Files.Count == 0) return NotInitializedResponse;
+
+        var enumName = Enum.GetName(typeof(EGame), profile.Version);
         var underscore = enumName!.LastIndexOf('_');
         var minor_version = int.Parse(enumName[(underscore + 1)..]);
 
         return new JsonResult(new
         {
-            name = MainProfile?.Provider.ProjectName,
-            major_version = MainProfile?.Version >= EGame.GAME_UE5_0 ? 5 : 4,
+            name = profile.Provider.ProjectName,
+            major_version = profile.Version >= EGame.GAME_UE5_0 ? 5 : 4,
             minor_version,
             /* Which mapping an older head's curves are written in terms of, said once here so
              * whoever needs it does not have to be told and cannot be told a different one */
             curve_mapping = DefaultCurveMapping,
             /* Where a widget tree may live when the widget itself was cooked without one */
             widget_tree_sources = DefaultWidgetTreeSources,
-            profile = MainProfile
+            profile
         });
     }
     
